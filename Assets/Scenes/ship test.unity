@@ -216,7 +216,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
 --- !u!1 &1493237767
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,15 +234,11 @@ GameObject:
   m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!114 &1493237769
-=======
---- !u!114 &1298941524
->>>>>>> 8aacb1b3149c4a570c71c2a59627543a25cd35c9
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD
   m_GameObject: {fileID: 1493237767}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -296,7 +291,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-=======
+--- !u!114 &1298941524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1298941520}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -325,7 +325,6 @@ Transform:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
->>>>>>> 8aacb1b3149c4a570c71c2a59627543a25cd35c9
 --- !u!1 &1818114598
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,17 +472,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8046988417708479eb4de45fb11b2345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  motor: {fileID: 0}
-  mouseSensitivity: 1.5
-=======
   motor: {fileID: 1818114606}
   pitchSensitivity: 8
   mouseYawWeight: 2
   boostKey: 304
   rollLeftKey: 113
   rollRightKey: 101
->>>>>>> 8aacb1b3149c4a570c71c2a59627543a25cd35c9
 --- !u!114 &1818114606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,20 +490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a0621356663949daa0139cc2a28a90b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  rb: {fileID: 0}
-  thrustPower: 20
-  strafePower: 12
-  liftPower: 12
-  maxSpeed: 25
-  linearDrag: 1.5
-  pitchTorque: 8
-  yawTorque: 8
-  rollTorque: 10
-  maxAngularSpeed: 2.5
-  angularDrag: 3
-  lateralDamping: 2
-=======
   rb: {fileID: 1818114599}
   thrustAcceleration: 30
   boostMultiplier: 1.75
@@ -524,7 +504,6 @@ MonoBehaviour:
   lateralDamping: 2
   verticalDamping: 3
   autoBankStrength: 0.45
->>>>>>> 8aacb1b3149c4a570c71c2a59627543a25cd35c9
   autoLevelStrength: 1
 --- !u!1 &1973268692
 GameObject:
