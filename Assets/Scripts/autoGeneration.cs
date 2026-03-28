@@ -10,7 +10,13 @@ public class ProceduralBlockGenerator : MonoBehaviour
     {
         public Vector3 position;
         public Vector3 size;
-        public float creationTime;
+    }
+
+    private struct SpawnedBlockData
+    {
+        public GameObject instance;
+        public Vector3 position;
+        public Vector3 scale;
     }
 
     [Header("References")]
@@ -47,22 +53,35 @@ public class ProceduralBlockGenerator : MonoBehaviour
     [SerializeField] private float zoneBufferRadius = 5f;  // Extra radius around destroyed blocks
     [SerializeField] private bool debugShowZones = false;  // Draw destroyed zones in Scene view
 
-    private List<Vector3> usedPositions = new List<Vector3>();
-    private List<GameObject> spawnedBlocks = new List<GameObject>();
-    private Dictionary<Vector3Int, int> chunkBlockCount = new Dictionary<Vector3Int, int>();
-    private List<DestroyedZone> destroyedZones = new List<DestroyedZone>();
+    private readonly List<SpawnedBlockData> spawnedBlocks = new List<SpawnedBlockData>();
+    private readonly Dictionary<Vector3Int, int> chunkBlockCount = new Dictionary<Vector3Int, int>();
+    private readonly List<DestroyedZone> destroyedZones = new List<DestroyedZone>();
+    private readonly Dictionary<Vector3Int, List<int>> spacingGrid = new Dictionary<Vector3Int, List<int>>();
+    private MaterialPropertyBlock materialPropertyBlock;
     private Vector3 originPosition;
     private Vector3 lastGenerationPosition;
 
-    void Start()
+    private void Awake()
     {
+        materialPropertyBlock = new MaterialPropertyBlock();
+    }
+
+    private void Start()
+    {
+        if (player == null)
+        {
+            Debug.LogError("ProceduralBlockGenerator: Player reference is missing.", this);
+            enabled = false;
+            return;
+        }
+
         originPosition = player.position;
         GenerateOriginMarker();
         GenerateBlocks();
         lastGenerationPosition = player.position;
     }
 
-    void Update()
+    private void Update()
     {
         // Check if player has moved far enough to trigger new generation
         float distanceFromLastGen = Vector3.Distance(player.position, lastGenerationPosition);
@@ -75,7 +94,7 @@ public class ProceduralBlockGenerator : MonoBehaviour
         }
     }
 
-    void GenerateOriginMarker()
+    private void GenerateOriginMarker()
     {
         if (greenCubePrefab != null)
         {
@@ -92,15 +111,18 @@ public class ProceduralBlockGenerator : MonoBehaviour
         }
     }
 
-    void GenerateBlocks()
+    private void GenerateBlocks()
     {
-        if (blockPrefab == null)
+        if (blockPrefab == null || blockPrefab.Length == 0)
             return;
+
+        CleanupDestroyedBlocks();
 
         int spawned = 0;
         int attempts = 0;
+        int maxAttempts = Mathf.Max(blockCount * 30, 1);
 
-        while (spawned < blockCount && attempts < blockCount * 30)
+        while (spawned < blockCount && attempts < maxAttempts)
         {
             attempts++;
 
@@ -128,19 +150,7 @@ public class ProceduralBlockGenerator : MonoBehaviour
             if (chunkBlockCount[chunkCoord] >= blocksPerChunk)
                 continue;
 
-            bool tooClose = false;
-
-            // Check against all used positions (considers all previously generated blocks)
-            foreach (Vector3 pos in usedPositions)
-            {
-                if (Vector3.Distance(pos, spawnPos) < minSpacing)
-                {
-                    tooClose = true;
-                    break;
-                }
-            }
-
-            if (tooClose)
+            if (IsTooCloseToExistingBlock(spawnPos))
                 continue;
 
             GameObject prefabToUse = blockPrefab[Random.Range(0, blockPrefab.Length)];
@@ -163,52 +173,142 @@ public class ProceduralBlockGenerator : MonoBehaviour
             Renderer renderer = block.GetComponent<Renderer>();
             if (renderer != null)
             {
-                Material mat = new Material(renderer.material);
-                mat.color = rarityColor;
-                renderer.material = mat;
+                renderer.GetPropertyBlock(materialPropertyBlock);
+                materialPropertyBlock.SetColor("_Color", rarityColor);
+                renderer.SetPropertyBlock(materialPropertyBlock);
             }
 
             // Update chunk block count
             chunkBlockCount[chunkCoord]++;
 
-            usedPositions.Add(spawnPos);
-            spawnedBlocks.Add(block);
+            RegisterSpawnedBlock(block, spawnPos, block.transform.localScale);
             spawned++;
         }
     }
 
-    Vector3Int GetChunkCoordinate(Vector3 position)
+    private Vector3Int GetChunkCoordinate(Vector3 position)
     {
         // Convert world position to chunk coordinate
-        int chunkX = Mathf.FloorToInt(position.x / chunkSize);
-        int chunkY = Mathf.FloorToInt(position.y / chunkSize);
-        int chunkZ = Mathf.FloorToInt(position.z / chunkSize);
+        float safeChunkSize = Mathf.Max(chunkSize, 0.01f);
+        int chunkX = Mathf.FloorToInt(position.x / safeChunkSize);
+        int chunkY = Mathf.FloorToInt(position.y / safeChunkSize);
+        int chunkZ = Mathf.FloorToInt(position.z / safeChunkSize);
         
         return new Vector3Int(chunkX, chunkY, chunkZ);
     }
 
-    void CleanupDistantBlocks()
+    private Vector3Int GetSpacingCell(Vector3 position)
     {
-        // Only clean up null blocks (destroyed manually or by other means)
-        // Keep all generated blocks in the world
+        float safeSpacing = Mathf.Max(minSpacing, 0.01f);
+        return new Vector3Int(
+            Mathf.FloorToInt(position.x / safeSpacing),
+            Mathf.FloorToInt(position.y / safeSpacing),
+            Mathf.FloorToInt(position.z / safeSpacing));
+    }
+
+    private bool IsTooCloseToExistingBlock(Vector3 spawnPos)
+    {
+        if (spawnedBlocks.Count == 0)
+            return false;
+
+        float minSpacingSqr = minSpacing * minSpacing;
+        Vector3Int cell = GetSpacingCell(spawnPos);
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                for (int z = -1; z <= 1; z++)
+                {
+                    Vector3Int neighborCell = new Vector3Int(cell.x + x, cell.y + y, cell.z + z);
+                    if (!spacingGrid.TryGetValue(neighborCell, out List<int> indices))
+                        continue;
+
+                    for (int i = 0; i < indices.Count; i++)
+                    {
+                        int blockIndex = indices[i];
+                        if (blockIndex < 0 || blockIndex >= spawnedBlocks.Count)
+                            continue;
+
+                        Vector3 delta = spawnedBlocks[blockIndex].position - spawnPos;
+                        if (delta.sqrMagnitude < minSpacingSqr)
+                            return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void RegisterSpawnedBlock(GameObject block, Vector3 position, Vector3 scale)
+    {
+        int index = spawnedBlocks.Count;
+        spawnedBlocks.Add(new SpawnedBlockData
+        {
+            instance = block,
+            position = position,
+            scale = scale
+        });
+
+        Vector3Int cell = GetSpacingCell(position);
+        if (!spacingGrid.TryGetValue(cell, out List<int> indices))
+        {
+            indices = new List<int>();
+            spacingGrid[cell] = indices;
+        }
+
+        indices.Add(index);
+    }
+
+    private void RebuildSpatialIndex()
+    {
+        spacingGrid.Clear();
+
+        for (int i = 0; i < spawnedBlocks.Count; i++)
+        {
+            Vector3Int cell = GetSpacingCell(spawnedBlocks[i].position);
+            if (!spacingGrid.TryGetValue(cell, out List<int> indices))
+            {
+                indices = new List<int>();
+                spacingGrid[cell] = indices;
+            }
+
+            indices.Add(i);
+        }
+    }
+
+    private void CleanupDistantBlocks()
+    {
+        CleanupDestroyedBlocks();
+    }
+
+    private void CleanupDestroyedBlocks()
+    {
+        bool removedAny = false;
+
         for (int i = spawnedBlocks.Count - 1; i >= 0; i--)
         {
-            if (spawnedBlocks[i] == null)
+            SpawnedBlockData blockData = spawnedBlocks[i];
+            if (blockData.instance == null)
             {
                 // Block was destroyed - update chunk count and register destroyed zone
-                Vector3Int chunkCoord = GetChunkCoordinate(usedPositions[i]);
+                Vector3Int chunkCoord = GetChunkCoordinate(blockData.position);
                 if (chunkBlockCount.ContainsKey(chunkCoord))
                 {
-                    chunkBlockCount[chunkCoord]--;
+                    chunkBlockCount[chunkCoord] = Mathf.Max(0, chunkBlockCount[chunkCoord] - 1);
                 }
 
                 // Register this position as a destroyed zone so no new blocks spawn here
-                RegisterDestroyedZone(usedPositions[i], Vector3.one);
+                RegisterDestroyedZone(blockData.position, blockData.scale);
 
-                usedPositions.RemoveAt(i);
                 spawnedBlocks.RemoveAt(i);
+                removedAny = true;
             }
         }
+
+        if (removedAny)
+            RebuildSpatialIndex();
     }
 
     /// <summary>
@@ -219,8 +319,7 @@ public class ProceduralBlockGenerator : MonoBehaviour
         DestroyedZone zone = new DestroyedZone
         {
             position = position,
-            size = blockSize + Vector3.one * zoneBufferRadius * 2f,  // Add buffer radius
-            creationTime = Time.time
+            size = blockSize + Vector3.one * zoneBufferRadius * 2f  // Add buffer radius
         };
         
         destroyedZones.Add(zone);
@@ -271,26 +370,24 @@ public class ProceduralBlockGenerator : MonoBehaviour
     /// </summary>
     public Vector3 GetRandomBlockPosition()
     {
+        CleanupDestroyedBlocks();
+
         if (spawnedBlocks.Count == 0)
-            return player.position;
+            return player != null ? player.position : transform.position;
 
-        // Find a non-null block
-        GameObject randomBlock = null;
-        int attempts = 0;
-        
-        while (randomBlock == null && attempts < 10)
-        {
-            int randomIndex = Random.Range(0, spawnedBlocks.Count);
-            randomBlock = spawnedBlocks[randomIndex];
-            attempts++;
-        }
+        int randomIndex = Random.Range(0, spawnedBlocks.Count);
+        return spawnedBlocks[randomIndex].position;
+    }
 
-        if (randomBlock != null)
-        {
-            return randomBlock.transform.position;
-        }
+    public bool HasSpawnedBlocks()
+    {
+        CleanupDestroyedBlocks();
+        return spawnedBlocks.Count > 0;
+    }
 
-        return player.position;
+    public Vector3 GetPlayerPosition()
+    {
+        return player != null ? player.position : transform.position;
     }
 
     /// <summary>
@@ -298,6 +395,7 @@ public class ProceduralBlockGenerator : MonoBehaviour
     /// </summary>
     public int GetSpawnedBlockCount()
     {
+        CleanupDestroyedBlocks();
         return spawnedBlocks.Count;
     }
 }

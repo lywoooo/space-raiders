@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class NPCController : MonoBehaviour
 {
@@ -171,12 +170,6 @@ public class NPCController : MonoBehaviour
             default:
                 return null;
         }
-    }
-
-    private void CheckDeath()
-    {
-        if (state == NPCState.Attack)
-            SceneManager.LoadScene("GameOver");
     }
 
     private void OnTriggerEnter(Collider other)
