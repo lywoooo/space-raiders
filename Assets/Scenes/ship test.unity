@@ -361,8 +361,6 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1298941520}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
-  m_LocalPosition: {x: 12.674486, y: 8.872139, z: 12.674487}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -414,6 +412,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1493237770}
   - component: {fileID: 1493237771}
+  - component: {fileID: 1493237772}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -481,6 +480,27 @@ MonoBehaviour:
   rarityMultiplierPerUnit: 0.02
   zoneBufferRadius: 5
   debugShowZones: 0
+--- !u!114 &1493237772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493237767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5db32f24653ccc644bb37679ee8a5bf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockGenerator: {fileID: 1493237771}
+  enemyPrefab:
+  - {fileID: 4707579161322892160, guid: bf79f5e5f3f91a344a46d16e7432fa60, type: 3}
+  - {fileID: 366791732702307635, guid: 5f2fa77d30e07104fad19754109693bd, type: 3}
+  - {fileID: 8255809744668323820, guid: 9c23edd4460bce445a3e11478af4dd2c, type: 3}
+  - {fileID: 7544716039167225204, guid: 78721c575fde892449b5be7411210991, type: 3}
+  spawnInterval: 10
+  spawnOffsetHeight: 5
+  spawnRandomRadius: 3
 --- !u!1 &1818114598
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,3 +815,4 @@ SceneRoots:
   - {fileID: 1973268694}
   - {fileID: 1818114604}
   - {fileID: 1493237770}
+  - {fileID: 13305946}

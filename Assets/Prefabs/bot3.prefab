@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8256918205343113152
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1390216032514092, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_Name
+      value: starfighter_thug_standard Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.0025
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.0025
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.0025
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 826.41296
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 909.9641
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -795.1617
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1390216032514092, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3977178551214765290}
+    - targetCorrespondingSourceObject: {fileID: 1390216032514092, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 992946702235746221}
+  m_SourcePrefab: {fileID: 100100000, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+--- !u!1 &8255809744668323820 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1390216032514092, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+  m_PrefabInstance: {fileID: 8256918205343113152}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3977178551214765290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8255809744668323820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a0621356663949daa0139cc2a28a90b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  thrustAcceleration: 30
+  boostMultiplier: 1.75
+  maxForwardSpeed: 35
+  maxReverseSpeed: 12
+  yawAcceleration: 8
+  pitchAcceleration: 7
+  rollAcceleration: 9
+  maxAngularSpeed: 2.5
+  linearDrag: 1.2
+  angularDrag: 2.5
+  lateralDamping: 3.5
+  verticalDamping: 3
+  autoBankStrength: 0.45
+  autoLevelStrength: 1.2
+--- !u!114 &992946702235746221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8255809744668323820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d1fd7e458ee144399748374a2eaf8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  motor: {fileID: 0}
+  playerShip: {fileID: 0}
+  waypoints: []
+  arrivalRadius: 5
+  pitchSensitivity: 2
+  yawSensitivity: 2
+  rollSensitivity: 0.6
+  throttleAngle: 30
+  chaseRange: 80
+  attackRange: 12
+  patrolThrust: 1
+  chaseThrust: 1
+  attackThrust: 0.35
+  useBoostInChase: 0

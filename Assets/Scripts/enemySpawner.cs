@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private ProceduralBlockGenerator blockGenerator;
-    [SerializeField] private GameObject[] enemyPrefab;
+    public ProceduralBlockGenerator blockGenerator;
+    public GameObject[] enemyPrefab;
 
     [Header("Spawn Settings")]
     [SerializeField] private float spawnInterval = 10f;
@@ -40,7 +40,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        if (enemyPrefab == null || blockGenerator == null)
+        if (enemyPrefab == null || enemyPrefab.Length == 0 || blockGenerator == null)
             return;
 
         // Try to find a valid spawn position on a loaded block multiple times
@@ -50,7 +50,8 @@ public class EnemySpawner : MonoBehaviour
             
             if (spawnPos != Vector3.zero)
             {
-                Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+                GameObject prefabToUse = enemyPrefab[Random.Range(0, enemyPrefab.Length)];
+                Instantiate(prefabToUse, spawnPos, Quaternion.identity);
                 return;
             }
         }
