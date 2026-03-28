@@ -1,3 +1,4 @@
+using System.Dynamic;
 using UnityEngine;
 
 public class ShipMotor : MonoBehaviour
@@ -49,6 +50,11 @@ public class ShipMotor : MonoBehaviour
         pitchInput = Mathf.Clamp(pitch, -1f, 1f);
         manualRollInput = Mathf.Clamp(manualRoll, -1f, 1f);
         boosting = boost;
+    }
+
+    public int getVelocity()
+    {
+        return rb.velocity;
     }
 
     private void FixedUpdate()
@@ -113,4 +119,6 @@ public class ShipMotor : MonoBehaviour
             rb.angularVelocity = rb.angularVelocity.normalized * maxAngularSpeed;
         }
     }
+
+    
 }
