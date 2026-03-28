@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class sceneLoader : MonoBehaviour
 {
-    public void LoadSceneByName(string sceneName)
+    public static void LoadSceneByName(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }
 
-    public void LoadSceneByIndex(int sceneIndex)
+    public static void LoadSceneByIndex(int sceneIndex)
     {
         SceneManager.LoadScene(sceneIndex);
     }
