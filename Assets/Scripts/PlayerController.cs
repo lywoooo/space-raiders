@@ -1,13 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerShipInput : MonoBehaviour
 {
     [SerializeField] private ShipMotor motor;
 
-    [Header("Look")]
-    [SerializeField] private float mouseSensitivity = 1.5f;
+    [Header("Input")]
+    [SerializeField] private float pitchSensitivity = 1.5f;
+    [SerializeField] private float mouseYawWeight = 0.35f;
+
+    [Header("Keys")]
+    [SerializeField] private KeyCode boostKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode rollLeftKey = KeyCode.Q;
+    [SerializeField] private KeyCode rollRightKey = KeyCode.E;
 
     private void Awake()
     {
@@ -20,20 +24,23 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        float thrust = Input.GetAxisRaw("Vertical");
-        float strafe = Input.GetAxisRaw("Horizontal");
+        float thrust = Input.GetAxisRaw("Vertical");      // W / S
+        float keyboardYaw = Input.GetAxisRaw("Horizontal"); // A / D
 
-        float lift = 0f;
-        if (Input.GetKey(KeyCode.Space)) lift += 1f;
-        if (Input.GetKey(KeyCode.LeftControl)) lift -= 1f;
+        // Mouse Y handles pitch
+        float pitch = -Input.GetAxis("Mouse Y") * pitchSensitivity;
 
-        float yaw = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float pitch = -Input.GetAxis("Mouse Y") * mouseSensitivity;
+        // Small mouse-x assist on yaw so keyboard turning feels less stiff
+        float mouseYaw = Input.GetAxis("Mouse X") * mouseYawWeight;
 
-        float roll = 0f;
-        if (Input.GetKey(KeyCode.Q)) roll += 1f;
-        if (Input.GetKey(KeyCode.E)) roll -= 1f;
+        float yaw = Mathf.Clamp(keyboardYaw + mouseYaw, -1f, 1f);
 
-        motor.SetInput(thrust, strafe, lift, pitch, yaw, roll);
+        float manualRoll = 0f;
+        if (Input.GetKey(rollLeftKey)) manualRoll += 1f;
+        if (Input.GetKey(rollRightKey)) manualRoll -= 1f;
+
+        bool boost = Input.GetKey(boostKey);
+
+        motor.SetInputs(thrust, yaw, pitch, manualRoll, boost);
     }
 }
