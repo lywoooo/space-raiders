@@ -311,6 +311,7 @@ MonoBehaviour:
   - {fileID: 3227188554907173655, guid: b66485824d4da074ca57921ca152d924, type: 3}
   - {fileID: 1237976945563109718, guid: a833525238ff43641adecba6d1e74821, type: 3}
   - {fileID: 8842431829488770805, guid: 0df7f3e030f1da24a9abe74e81197585, type: 3}
+  - {fileID: 8842431829488770805, guid: 0df7f3e030f1da24a9abe74e81197585, type: 3}
   generationRadiusX: 60
   generationRadiusZ: 60
   blockCount: 25
@@ -475,7 +476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   motor: {fileID: 1818114606}
   pitchSensitivity: 8
-  mouseYawWeight: 2
+  yawSensitivity: 0.35
   boostKey: 304
   rollLeftKey: 113
   rollRightKey: 101

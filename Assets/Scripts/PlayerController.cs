@@ -6,7 +6,7 @@ public class PlayerShipInput : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private float pitchSensitivity = 1.5f;
-    [SerializeField] private float mouseYawWeight = 0.35f;
+    [SerializeField] private float yawSensitivity = 0.35f;
 
     [Header("Keys")]
     [SerializeField] private KeyCode boostKey = KeyCode.LeftShift;
@@ -31,7 +31,7 @@ public class PlayerShipInput : MonoBehaviour
         float pitch = -Input.GetAxis("Mouse Y") * pitchSensitivity;
 
         // Small mouse-x assist on yaw so keyboard turning feels less stiff
-        float mouseYaw = Input.GetAxis("Mouse X") * mouseYawWeight;
+        float mouseYaw = Input.GetAxis("Mouse X") * yawSensitivity;
 
         float yaw = Mathf.Clamp(keyboardYaw + mouseYaw, -1f, 1f);
 
