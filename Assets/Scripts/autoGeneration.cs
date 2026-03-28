@@ -3,6 +3,16 @@ using UnityEngine;
 
 public class ProceduralBlockGenerator : MonoBehaviour
 {
+    /// <summary>
+    /// Represents an invisible zone where blocks were destroyed and should not be regenerated
+    /// </summary>
+    private struct DestroyedZone
+    {
+        public Vector3 position;
+        public Vector3 size;
+        public float creationTime;
+    }
+
     [Header("References")]
     public Transform player;
     public GameObject greenCubePrefab;     // Origin marker
@@ -33,9 +43,14 @@ public class ProceduralBlockGenerator : MonoBehaviour
     public float distanceFromOriginForRarity = 50f;
     public float rarityMultiplierPerUnit = 0.02f;
 
+    [Header("Destroyed Zone Settings")]
+    [SerializeField] private float zoneBufferRadius = 5f;  // Extra radius around destroyed blocks
+    [SerializeField] private bool debugShowZones = false;  // Draw destroyed zones in Scene view
+
     private List<Vector3> usedPositions = new List<Vector3>();
     private List<GameObject> spawnedBlocks = new List<GameObject>();
     private Dictionary<Vector3Int, int> chunkBlockCount = new Dictionary<Vector3Int, int>();
+    private List<DestroyedZone> destroyedZones = new List<DestroyedZone>();
     private Vector3 originPosition;
     private Vector3 lastGenerationPosition;
 
@@ -96,6 +111,10 @@ public class ProceduralBlockGenerator : MonoBehaviour
                 Random.Range(minBlockHeight, maxBlockHeight),
                 player.position.z + randomCircle.y * generationRadiusZ
             );
+
+            // Check if position is inside a destroyed zone
+            if (IsInDestroyedZone(spawnPos))
+                continue;
 
             // Get the chunk this position belongs to
             Vector3Int chunkCoord = GetChunkCoordinate(spawnPos);
@@ -176,16 +195,109 @@ public class ProceduralBlockGenerator : MonoBehaviour
         {
             if (spawnedBlocks[i] == null)
             {
-                // Block was destroyed - update chunk count
+                // Block was destroyed - update chunk count and register destroyed zone
                 Vector3Int chunkCoord = GetChunkCoordinate(usedPositions[i]);
                 if (chunkBlockCount.ContainsKey(chunkCoord))
                 {
                     chunkBlockCount[chunkCoord]--;
                 }
 
+                // Register this position as a destroyed zone so no new blocks spawn here
+                RegisterDestroyedZone(usedPositions[i], Vector3.one);
+
                 usedPositions.RemoveAt(i);
                 spawnedBlocks.RemoveAt(i);
             }
         }
+    }
+
+    /// <summary>
+    /// Registers a position as a destroyed zone (invisible chunk block) where new blocks should not spawn
+    /// </summary>
+    public void RegisterDestroyedZone(Vector3 position, Vector3 blockSize)
+    {
+        DestroyedZone zone = new DestroyedZone
+        {
+            position = position,
+            size = blockSize + Vector3.one * zoneBufferRadius * 2f,  // Add buffer radius
+            creationTime = Time.time
+        };
+        
+        destroyedZones.Add(zone);
+    }
+
+    /// <summary>
+    /// Checks if a position is inside any destroyed zone
+    /// </summary>
+    private bool IsInDestroyedZone(Vector3 position)
+    {
+        foreach (DestroyedZone zone in destroyedZones)
+        {
+            Vector3 diff = position - zone.position;
+            
+            // Check if position is within the zone bounds
+            if (Mathf.Abs(diff.x) < zone.size.x / 2f &&
+                Mathf.Abs(diff.y) < zone.size.y / 2f &&
+                Mathf.Abs(diff.z) < zone.size.z / 2f)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /// <summary>
+    /// Visual debugging - draws destroyed zones in the Scene view
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        if (!debugShowZones)
+            return;
+
+        if (destroyedZones == null)
+            return;
+
+        Gizmos.color = new Color(1f, 0f, 0f, 0.3f);  // Red with transparency
+        
+        foreach (DestroyedZone zone in destroyedZones)
+        {
+            Gizmos.DrawCube(zone.position, zone.size);
+        }
+    }
+
+    /// <summary>
+    /// Gets a random position from a loaded block, useful for spawning enemies
+    /// </summary>
+    public Vector3 GetRandomBlockPosition()
+    {
+        if (spawnedBlocks.Count == 0)
+            return player.position;
+
+        // Find a non-null block
+        GameObject randomBlock = null;
+        int attempts = 0;
+        
+        while (randomBlock == null && attempts < 10)
+        {
+            int randomIndex = Random.Range(0, spawnedBlocks.Count);
+            randomBlock = spawnedBlocks[randomIndex];
+            attempts++;
+        }
+
+        if (randomBlock != null)
+        {
+            return randomBlock.transform.position;
+        }
+
+        return player.position;
+    }
+
+    /// <summary>
+    /// Gets the count of currently spawned blocks
+    /// </summary>
+    public int GetSpawnedBlockCount()
+    {
+        return spawnedBlocks.Count;
     }
 }
