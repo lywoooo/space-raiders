@@ -661,12 +661,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1493237770}
-<<<<<<< HEAD
   - component: {fileID: 1493237771}
   - component: {fileID: 1493237772}
-=======
   - component: {fileID: 1493237769}
->>>>>>> c9248c78b873051985bcecbe5b2ecd063a6c6c06
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -717,7 +714,6 @@ MonoBehaviour:
   regenerationDistance: 20
   distanceFromOriginForRarity: 50
   rarityMultiplierPerUnit: 0.02
-<<<<<<< HEAD
   zoneBufferRadius: 5
   debugShowZones: 0
 --- !u!114 &1493237772
@@ -862,9 +858,7 @@ MeshFilter:
   m_GameObject: {fileID: 1818114598}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &1818114604
-=======
 --- !u!4 &1493237770
->>>>>>> c9248c78b873051985bcecbe5b2ecd063a6c6c06
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -981,8 +975,5 @@ SceneRoots:
   - {fileID: 1973268694}
   - {fileID: 1493237770}
   - {fileID: 13305946}
-<<<<<<< HEAD
-=======
   - {fileID: 973556030}
   - {fileID: 1217842645}
->>>>>>> c9248c78b873051985bcecbe5b2ecd063a6c6c06

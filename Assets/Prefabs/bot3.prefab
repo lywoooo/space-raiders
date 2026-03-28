@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1390216032514092, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
       propertyPath: m_Name
-      value: starfighter_thug_standard Variant
+      value: bot3
       objectReference: {fileID: 0}
     - target: {fileID: 4452182249762708, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
       propertyPath: m_LocalScale.x
@@ -74,6 +74,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1390216032514092, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
       insertIndex: -1
       addedObject: {fileID: 992946702235746221}
+    - targetCorrespondingSourceObject: {fileID: 1390216032514092, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5175340650372896149}
   m_SourcePrefab: {fileID: 100100000, guid: afa6c93c0bc1ef947a35e903586e1540, type: 3}
 --- !u!1 &8255809744668323820 stripped
 GameObject:
@@ -92,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a0621356663949daa0139cc2a28a90b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
+  rb: {fileID: -5175340650372896149}
   thrustAcceleration: 30
   boostMultiplier: 1.75
   maxForwardSpeed: 35
@@ -133,3 +136,30 @@ MonoBehaviour:
   chaseThrust: 1
   attackThrust: 0.35
   useBoostInChase: 0
+--- !u!54 &-5175340650372896149
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8255809744668323820}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
