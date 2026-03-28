@@ -21,7 +21,7 @@ public class ProceduralBlockGenerator : MonoBehaviour
 
     [Header("References")]
     public Transform player;
-    public GameObject greenCubePrefab;     // Origin marker
+    //public GameObject greenCubePrefab;     // Origin marker
     public GameObject[] blockPrefab;         // Block to spawn around the player
 
     [Header("Generation Area")]
@@ -76,7 +76,7 @@ public class ProceduralBlockGenerator : MonoBehaviour
         }
 
         originPosition = player.position;
-        GenerateOriginMarker();
+        //GenerateOriginMarker();
         GenerateBlocks();
         lastGenerationPosition = player.position;
     }
@@ -94,22 +94,22 @@ public class ProceduralBlockGenerator : MonoBehaviour
         }
     }
 
-    private void GenerateOriginMarker()
-    {
-        if (greenCubePrefab != null)
-        {
-            Instantiate(greenCubePrefab, player.position, Quaternion.identity);
-        }
-        else
-        {
-            GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            marker.transform.position = player.position;
-            marker.transform.localScale = Vector3.one;
+    // private void GenerateOriginMarker()
+    // {
+    //     // if (greenCubePrefab != null)
+    //     // {
+    //     //     Instantiate(greenCubePrefab, player.position, Quaternion.identity);
+    //     // }
+    //     // else
+    //     // {
+    //         GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+    //         marker.transform.position = player.position;
+    //         marker.transform.localScale = Vector3.one;
 
-            Renderer r = marker.GetComponent<Renderer>();
-            r.material.color = Color.green;
-        }
-    }
+    //         Renderer r = marker.GetComponent<Renderer>();
+    //         r.material.color = Color.green;
+    //     //}
+    // }
 
     private void GenerateBlocks()
     {

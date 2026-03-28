@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NPCController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class NPCController : MonoBehaviour
     [Header("Ranges")]
     [SerializeField] private float chaseRange = 80f;
     [SerializeField] private float attackRange = 12f;
+    [SerializeField] private float killRange = 2f;
 
     [Header("Throttle")]
     [SerializeField] private float patrolThrust = 1f;
@@ -36,7 +38,8 @@ public class NPCController : MonoBehaviour
         Idle,
         Patrol,
         Chase,
-        Attack
+        Attack,
+        Kill
     }
 
     private NPCState state = NPCState.Chase;
@@ -46,12 +49,16 @@ public class NPCController : MonoBehaviour
     {
         if (motor == null)
             motor = GetComponent<ShipMotor>();
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
+        playerShip = playerObj.transform;
     }
 
     private void Update()
     {
         UpdateState();
         UpdateSteering();
+        checkKill();
     }
 
     private void FixedUpdate()
@@ -72,7 +79,10 @@ public class NPCController : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, playerShip.position);
 
-        if (distance <= attackRange)
+        if (distance <= killRange){
+            state = NPCState.Kill;
+        }
+        else if (distance <= attackRange)
         {
             state = NPCState.Attack;
         }
@@ -177,6 +187,13 @@ public class NPCController : MonoBehaviour
         if (other.CompareTag("Asteroid"))
         {
             Destroy(gameObject);
+        }
+    }
+    private void checkKill(){
+        if(state == NPCState.Kill){
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            SceneManager.LoadScene("endGame");
         }
     }
 }

@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d1fd7e458ee144399748374a2eaf8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motor: {fileID: 0}
+  motor: {fileID: 1950758146312806036}
   playerShip: {fileID: 0}
   waypoints: []
   arrivalRadius: 5
