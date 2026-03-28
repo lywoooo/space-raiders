@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0ab3e92944fd76048a6ce5a681d3397a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - player: {instanceID: 0}
+  - greenCubePrefab: {instanceID: 0}
+  - blockPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
