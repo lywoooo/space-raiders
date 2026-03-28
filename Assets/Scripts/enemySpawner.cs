@@ -3,8 +3,8 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private ProceduralBlockGenerator blockGenerator;
-    [SerializeField] private GameObject[] enemyPrefab;
+    public ProceduralBlockGenerator blockGenerator;
+    public GameObject[] enemyPrefab;
 
     [Header("Spawn Settings")]
     [SerializeField] private float spawnInterval = 10f;
@@ -44,6 +44,13 @@ public class EnemySpawner : MonoBehaviour
         for (int attempts = 0; attempts < 5; attempts++)
         {
             Vector3 spawnPos = GetRandomSpawnPosition();
+            
+            if (spawnPos != Vector3.zero)
+            {
+                GameObject prefabToUse = enemyPrefab[Random.Range(0, enemyPrefab.Length)];
+                Instantiate(prefabToUse, spawnPos, Quaternion.identity);
+                return;
+            }
 
             GameObject prefabToSpawn = enemyPrefab[Random.Range(0, enemyPrefab.Length)];
             if (prefabToSpawn == null)
