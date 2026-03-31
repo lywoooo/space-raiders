@@ -100,3 +100,5 @@ InitTestScene*.unity*
 
 [Bb]uild/
 [Bb]uilds/
+docs/
+.DS_Store

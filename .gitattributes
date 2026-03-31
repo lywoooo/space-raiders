@@ -47,6 +47,8 @@
 *.lxo filter=lfs diff=lfs merge=lfs -text
 *.dae filter=lfs diff=lfs merge=lfs -text
 *.hdr filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+docs/Build/docs.data.gz filter=lfs diff=lfs merge=lfs -text
 
 ## GitHub Linguist ##
 # Show the repo as gameplay code first, not imported Unity asset packs
@@ -68,10 +70,10 @@ Assets/Scripts/** linguist-detectable=true
 Assets/PolyAnarchy/** linguist-vendored
 Assets/BreakableAsteroids/** linguist-vendored
 Assets/BlackHole/** linguist-vendored
-Assets/TextMesh Pro/** linguist-vendored
+"Assets/TextMesh Pro/**" linguist-vendored
 Assets/Sci-FiSpaceFighterPBR/** linguist-vendored
-Assets/Free Skyboxes - Space/** linguist-vendored
-Assets/SpaceSkies Free/** linguist-vendored
+"Assets/Free Skyboxes - Space/**" linguist-vendored
+"Assets/SpaceSkies Free/**" linguist-vendored
 
 # Ignore docs/web build output from language stats
 docs/** linguist-generated
